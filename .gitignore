@@ -24,4 +24,9 @@ dist-ssr
 *.sw?
 
 # Claude Code local settings (keep .claude/memory tracked, ignore local config)
-.claude/settings.local.json
+.claude/
+.playwright-mcp/
+Assets/
+screenshot.png
+workload-pacing-prototype/
+WORKLOAD_PACING_PROTOTYPE_PLAN.md

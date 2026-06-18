@@ -187,20 +187,22 @@ export default function AdminCenterPage({ onProductChange, selectedProduct, prod
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Routing');
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-  const [activeSubPage, setActiveSubPage] = useState('queues'); // Default to queues as per Figma design
+  const [activeSubPage, setActiveSubPage] = useState('routing-config');
 
   const handleToggleNav = () => {
     setIsNavCollapsed(!isNavCollapsed);
   };
 
   const handleSubPageSelect = (itemId) => {
-    setActiveSubPage(itemId);
+    if (itemId === 'routing-config') {
+      setActiveSubPage(itemId);
+    }
   };
 
-  // Render the Queues page when selected
-  if (activeSubPage === 'queues') {
+  if (activeSubPage === 'routing-config') {
     return (
-      <QueuesPage 
+      <QueuesPage
+        initialSubPage={activeSubPage}
         onProductChange={onProductChange}
         selectedProduct={selectedProduct}
         products={products}

@@ -62,7 +62,9 @@ function MainContent({ selectedTicket, onSelectTicket, onCloseConversation, onSt
 }
 
 function App() {
-  const [selectedProduct, setSelectedProduct] = useState(products.find(p => p.current));
+  const [selectedProduct, setSelectedProduct] = useState(
+    products.find((p) => p.id === 'admin')
+  );
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [openTicketTabs, setOpenTicketTabs] = useState([]);
   const { setCurrentProduct } = useTheme();
@@ -73,9 +75,9 @@ function App() {
   }, [selectedProduct, setCurrentProduct]);
 
   const handleProductChange = (product) => {
+    if (product.id !== 'admin') return;
     setSelectedProduct(product);
-    setCurrentProduct(product.id); // Update theme context with new product
-    // Clear selected ticket when changing pages
+    setCurrentProduct(product.id);
     setSelectedTicket(null);
   };
 

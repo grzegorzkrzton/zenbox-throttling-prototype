@@ -28,6 +28,7 @@
     "@zendeskgarden/react-typography": "^9.15.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "recharts": "^3.8.1",
     "styled-components": "^6.3.11",
     "uifork": "^0.0.10"
   },

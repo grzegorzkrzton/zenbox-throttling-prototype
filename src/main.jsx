@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider as GardenThemeProvider } from '@zendeskgarden/react-theming'
 import { ThemeProvider, useTheme } from './contexts'
+import PasswordGate from './components/PasswordGate'
 import './index.css'
 import App from './App.jsx'
 
@@ -19,7 +20,9 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
       <GardenThemeWrapper>
-        <App />
+        <PasswordGate>
+          <App />
+        </PasswordGate>
       </GardenThemeWrapper>
     </ThemeProvider>
   </StrictMode>,

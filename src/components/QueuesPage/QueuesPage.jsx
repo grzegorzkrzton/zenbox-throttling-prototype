@@ -5,6 +5,7 @@ import TopBar from '../TopBar/TopBar';
 import PageSidebarNav from '../PageSidebarNav';
 import QueuesTable from './QueuesTable';
 import QueueEditPage from './QueueEditPage';
+import RoutingConfigPage from '../RoutingConfigPage';
 import './QueuesPage.css';
 
 // Admin Center specific icons
@@ -139,8 +140,8 @@ const secondaryNavSections = [
   {
     title: 'Omnichannel routing',
     items: [
-      { id: 'routing-config', label: 'Routing configurations' },
-      { id: 'queues', label: 'Queues', active: true },
+      { id: 'routing-config', label: 'Routing configurations', active: true },
+      { id: 'queues', label: 'Queues' },
       { id: 'capacity-rules', label: 'Capacity rules' },
       { id: 'agent-statuses', label: 'Agent statuses' },
       { id: 'status-timeout', label: 'Status timeout' },
@@ -1153,8 +1154,14 @@ function QueueEvaluationPanel({
 
 
 
-export default function QueuesPage({ onProductChange, selectedProduct, products }) {
+export default function QueuesPage({
+  onProductChange,
+  selectedProduct,
+  products,
+  initialSubPage = 'queues',
+}) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeSubPage, setActiveSubPage] = useState(initialSubPage);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [queues, setQueues] = useState(sampleQueues);
   const [selectedQueue, setSelectedQueue] = useState(null);
@@ -1192,8 +1199,18 @@ export default function QueuesPage({ onProductChange, selectedProduct, products 
     }
   }, [evaluationProgress.currentStep, evaluationProgress.totalSteps, evaluatingQueue]);
 
+  useEffect(() => {
+    setActiveSubPage(initialSubPage);
+  }, [initialSubPage]);
+
   const handleToggleNav = () => {
     setIsNavCollapsed(!isNavCollapsed);
+  };
+
+  const handleSubPageSelect = (itemId) => {
+    if (itemId === 'routing-config') {
+      setActiveSubPage(itemId);
+    }
   };
 
   const handleReorderQueues = (fromIndex, toIndex) => {
@@ -1408,11 +1425,25 @@ export default function QueuesPage({ onProductChange, selectedProduct, products 
       primaryItems={primaryNavItems}
       secondaryHeading="Objects and rules"
       secondarySections={secondaryNavSections}
-      activeItem="queues"
+      activeItem={activeSubPage}
+      onItemSelect={handleSubPageSelect}
       isCollapsed={isNavCollapsed}
       onToggleCollapse={handleToggleNav}
     />
   );
+
+  if (activeSubPage === 'routing-config') {
+    return (
+      <RoutingConfigPage
+        navColumn={navColumn}
+        selectedProduct={selectedProduct}
+        products={products}
+        onProductChange={onProductChange}
+        isNavCollapsed={isNavCollapsed}
+        onNavigateToQueues={() => setActiveSubPage('queues')}
+      />
+    );
+  }
 
   // Show Queue Edit Page if a queue is selected
   if (selectedQueue) {
