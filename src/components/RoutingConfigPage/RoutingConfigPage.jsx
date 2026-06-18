@@ -122,7 +122,7 @@ export default function RoutingConfigPage({
 
                 <section className="routing-config-section" style={{ paddingTop: '24px', borderTop: 'none' }}>
                   <div className="routing-config-section__header">
-                    <h3 className="routing-config-section__title">Workload pacing</h3>
+                    <h3 className="routing-config-section__title">Workload ramp-up</h3>
                     <p className="routing-config-section__description">
                       Gradually increase agent capacity when they sign in for the first time each day.
                     </p>
@@ -136,7 +136,7 @@ export default function RoutingConfigPage({
                           setWorkloadPacing({ ...workloadPacing, featureEnabled: e.target.checked })
                         }
                       >
-                        <Label isRegular={false}>Workload pacing</Label>
+                        <Label isRegular={false}>Workload ramp-up</Label>
                       </Checkbox>
                       <Hint className="routing-config-section__channel-hint">
                         Gradually pace assignments when an agent signs in for the first time each day.

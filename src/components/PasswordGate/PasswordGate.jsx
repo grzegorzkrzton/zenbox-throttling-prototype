@@ -45,7 +45,7 @@ export default function PasswordGate({ children }) {
     <div className="password-gate">
       <div className="password-gate__card">
         <LG tag="h1" className="password-gate__title">
-          Workload pacing prototype
+          Workload ramp-up prototype
         </LG>
         <MD className="password-gate__description">
           Enter the password to view this prototype.
