@@ -42,8 +42,8 @@ export default function ChannelConfig({ config, onChange, onValidityChange }) {
           value={capacityValue}
           onChange={handleCapacityChange}
           type="number"
-          min={0}
-          max={100}
+          min={1}
+          max={99}
         />
         {capacityError && <Message validation="error">{capacityError}</Message>}
       </Field>

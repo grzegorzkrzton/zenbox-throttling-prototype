@@ -23,7 +23,7 @@ export const validateCapacity = (val) => {
   if (val === '') return 'Required';
   const num = parseInt(val, 10);
   if (Number.isNaN(num)) return 'Must be a number';
-  if (num < 0 || num > 100) return 'Must be between 0 and 100';
+  if (num < 1 || num > 99) return 'Must be between 1 and 99';
   return null;
 };
 
