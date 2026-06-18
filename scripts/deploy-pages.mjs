@@ -50,7 +50,18 @@ execSync('git config user.name "grzegorzkrzton"', { cwd: workDir, stdio: 'inheri
 execSync('git config user.email "grzegorz.krzton@zendesk.com"', { cwd: workDir, stdio: 'inherit' });
 
 run('git add -A');
-run('git commit -m "Deploy site"');
+
+const hasChanges = execSync('git status --porcelain', {
+  cwd: workDir,
+  encoding: 'utf8',
+}).trim();
+
+if (hasChanges) {
+  run('git commit -m "Deploy site"');
+} else {
+  console.log('No file changes since last deploy; triggering a Pages rebuild.');
+  run('git commit --allow-empty -m "Retrigger Pages build"');
+}
 
 if (hasGhPagesBranch) {
   run('git push origin gh-pages');
