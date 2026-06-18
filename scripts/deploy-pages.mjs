@@ -21,15 +21,15 @@ fs.rmSync(workDir, { recursive: true, force: true });
 
 let hasGhPagesBranch = true;
 try {
-  execSync(`git clone --depth 1 --branch gh-pages --single-branch ${remoteUrl} ${workDir}`, {
-    cwd: rootDir,
-    stdio: 'inherit',
-  });
+  execSync(
+    `git clone --depth 1 --branch gh-pages --single-branch "${remoteUrl}" "${workDir}"`,
+    { cwd: rootDir, stdio: 'inherit' },
+  );
 } catch {
   hasGhPagesBranch = false;
   fs.mkdirSync(workDir, { recursive: true });
   execSync('git init', { cwd: workDir, stdio: 'inherit' });
-  execSync(`git remote add origin ${remoteUrl}`, { cwd: workDir, stdio: 'inherit' });
+  execSync(`git remote add origin "${remoteUrl}"`, { cwd: workDir, stdio: 'inherit' });
   execSync('git checkout -b gh-pages', { cwd: workDir, stdio: 'inherit' });
 }
 
