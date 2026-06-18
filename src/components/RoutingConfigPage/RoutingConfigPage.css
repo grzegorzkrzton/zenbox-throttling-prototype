@@ -145,7 +145,7 @@
 }
 
 .routing-config-section__channel-hint {
-  margin-left: var(--spacing-lg);
+  margin-left: var(--spacing-xl);
 }
 
 .routing-config-section__panel [data-garden-id='forms.checkbox_hint'] {
