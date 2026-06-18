@@ -31,7 +31,7 @@ export const validateDuration = (val) => {
   if (val === '') return 'Required';
   const num = parseInt(val, 10);
   if (Number.isNaN(num)) return 'Must be a number';
-  if (num < 5 || num > 120) return 'Must be between 5 and 120 minutes';
+  if (num < 5 || num > 180) return 'Must be between 5 and 180 minutes';
   return null;
 };
 

@@ -16,7 +16,7 @@ import {
 import { generateGraphData } from './workload-pacing';
 import { createLineHoverDot } from './LineHoverDot';
 
-function getTicketAxisTicks(maxValue) {
+function getAxisTicks(maxValue) {
   return Array.from({ length: maxValue + 1 }, (_, index) => index);
 }
 
@@ -99,8 +99,18 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
   );
 
   const yAxisTicks = useMemo(
-    () => getTicketAxisTicks(maxAxisValue),
+    () => getAxisTicks(maxAxisValue),
     [maxAxisValue]
+  );
+
+  const maxTimeValue = useMemo(() => {
+    if (graphData.length === 0) return 0;
+    return graphData[graphData.length - 1].time;
+  }, [graphData]);
+
+  const xAxisTicks = useMemo(
+    () => getAxisTicks(maxTimeValue),
+    [maxTimeValue]
   );
 
   const showTooltip = useCallback((point) => {
@@ -167,6 +177,10 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                   <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                   <XAxis
                     dataKey="time"
+                    domain={[0, maxTimeValue]}
+                    ticks={xAxisTicks}
+                    allowDecimals={false}
+                    interval={0}
                     tickMargin={8}
                     axisLine={false}
                     tickLine={false}

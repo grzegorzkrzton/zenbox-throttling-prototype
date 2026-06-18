@@ -54,7 +54,7 @@ export default function ChannelConfig({ config, onChange, onValidityChange }) {
           onChange={handleDurationChange}
           type="number"
           min={5}
-          max={120}
+          max={180}
         />
         {durationError && <Message validation="error">{durationError}</Message>}
       </Field>
