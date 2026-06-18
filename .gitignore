@@ -26,7 +26,8 @@ dist-ssr
 # Claude Code local settings (keep .claude/memory tracked, ignore local config)
 .claude/
 .playwright-mcp/
-Assets/
+/Assets/
+.gh-pages-worktree/
 screenshot.png
 workload-pacing-prototype/
 WORKLOAD_PACING_PROTOTYPE_PLAN.md

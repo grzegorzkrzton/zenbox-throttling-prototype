@@ -8,8 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "node scripts/deploy-pages.mjs"
   },
   "dependencies": {
     "@zendeskgarden/react-avatars": "^9.15.0",

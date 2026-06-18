@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../../contexts';
 import { SunIcon, MoonIcon } from '../Icons';
+import { assetUrl } from '../../utils/assetUrl';
 import './ProfileMenu.css';
 
 export default function ProfileMenu({ className = '' }) {
@@ -27,7 +28,7 @@ export default function ProfileMenu({ className = '' }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="profile-menu__avatar-img">
-          <img src="/assets/Avatar.png" alt="Profile avatar" />
+          <img src={assetUrl('/assets/Avatar.png')} alt="Profile avatar" />
         </div>
       </button>
 

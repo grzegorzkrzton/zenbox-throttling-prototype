@@ -274,16 +274,18 @@ export function WFMSettingsIcon({ className, active }) {
   return <Icon name="settings" className={className} outlined={!active} />;
 }
 
+import { assetUrl } from '../../utils/assetUrl';
+
 export function AdminCenterProductIcon({ className }) {
-  return <img src="/assets/admin center.svg" alt="" className={className} aria-hidden="true" />;
+  return <img src={assetUrl('/assets/admin center.svg')} alt="" className={className} aria-hidden="true" />;
 }
 
 export function SupportProductIcon({ className }) {
-  return <img src="/assets/Product support.svg" alt="" className={className} aria-hidden="true" />;
+  return <img src={assetUrl('/assets/Product support.svg')} alt="" className={className} aria-hidden="true" />;
 }
 
 export function WFMProductIcon({ className }) {
-  return <img src="/assets/Product workforce management.svg" alt="" className={className} aria-hidden="true" />;
+  return <img src={assetUrl('/assets/Product workforce management.svg')} alt="" className={className} aria-hidden="true" />;
 }
 
 export function ExploreProductIcon({ className }) {
