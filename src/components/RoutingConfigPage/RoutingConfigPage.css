@@ -175,6 +175,7 @@
 /* Capacity graph modal — spacing on 4px grid via Garden tokens */
 .capacity-graph-modal {
   --capacity-graph-x-axis-distance: 48px;
+  --capacity-graph-left-gutter: 48px;
 }
 
 .capacity-graph-modal [data-garden-id='modals.body'] {
@@ -202,6 +203,7 @@
   align-items: stretch;
   width: 100%;
   min-height: 360px;
+  padding-left: var(--capacity-graph-left-gutter);
 }
 
 .capacity-graph-modal__chart-scroll {
@@ -221,7 +223,6 @@
   flex-direction: row;
   align-items: stretch;
   height: 360px;
-  padding-left: var(--spacing-md);
 }
 
 .capacity-graph-modal__chart-y-axis-title-wrap {
@@ -240,14 +241,19 @@
   transform: rotate(-90deg);
 }
 
-.capacity-graph-modal__chart-y-axis-ticks {
+.capacity-graph-modal__chart-y-axis-scale {
+  position: relative;
   flex-shrink: 0;
-  overflow: visible;
+  width: 36px;
 }
 
-.capacity-graph-modal__chart-y-axis-ticks .recharts-wrapper,
-.capacity-graph-modal__chart-y-axis-ticks .recharts-surface {
-  overflow: visible;
+.capacity-graph-modal__chart-y-axis-tick {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  transform: translateY(-50%);
+  line-height: 1;
+  text-align: right;
 }
 
 .capacity-graph-modal__chart-plot {
@@ -259,6 +265,7 @@
   align-items: flex-start;
   width: 100%;
   margin-top: var(--spacing-xs);
+  padding-left: var(--capacity-graph-left-gutter);
   background: var(--color-bg-white);
 }
 
