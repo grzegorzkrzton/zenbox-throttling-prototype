@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import { generateGraphData } from './workload-pacing';
 import { createLineHoverDot } from './LineHoverDot';
+import { getXAxisDisplayTicks } from './chart-axis-ticks';
 
 function getAxisTicks(maxValue) {
   return Array.from({ length: maxValue + 1 }, (_, index) => index);
@@ -111,8 +112,8 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     return graphData[graphData.length - 1].time;
   }, [graphData]);
 
-  const xAxisTicks = useMemo(
-    () => getAxisTicks(maxTimeValue),
+  const xAxisDisplayTicks = useMemo(
+    () => getXAxisDisplayTicks(maxTimeValue),
     [maxTimeValue]
   );
 
@@ -181,9 +182,8 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                   <XAxis
                     dataKey="time"
                     domain={[0, maxTimeValue]}
-                    ticks={xAxisTicks}
+                    ticks={xAxisDisplayTicks}
                     allowDecimals={false}
-                    interval={0}
                     tickMargin={8}
                     axisLine={false}
                     tickLine={false}
