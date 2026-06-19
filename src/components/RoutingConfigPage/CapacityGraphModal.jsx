@@ -18,6 +18,7 @@ import {
   X_AXIS_DISTANCE,
   CHART_HEIGHT,
   Y_AXIS_WIDTH,
+  Y_AXIS_TICK_WIDTH,
   CHART_Y_MARGIN,
   CHART_PLOT_MARGIN,
 } from './chart-constants';
@@ -171,13 +172,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     return items;
   }, [email.enabled, messaging.enabled, emailColor, messagingColor]);
 
-  const yAxisLabel = {
-    value: 'Agent capacity (tickets)',
-    angle: -90,
-    position: 'insideLeft',
-    offset: 8,
-    style: { textAnchor: 'middle' },
-  };
+  const yAxisLabel = 'Agent capacity (tickets)';
 
   const sharedYAxisProps = {
     domain: [0, maxAxisValue],
@@ -203,18 +198,21 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                   className="capacity-graph-modal__chart-y-axis"
                   style={{ width: Y_AXIS_WIDTH }}
                 >
-                  <LineChart
-                    width={Y_AXIS_WIDTH}
-                    height={CHART_HEIGHT}
-                    data={graphData}
-                    margin={CHART_Y_MARGIN}
-                  >
-                    <YAxis
-                      {...sharedYAxisProps}
-                      width={Y_AXIS_WIDTH - CHART_Y_MARGIN.left}
-                      label={yAxisLabel}
-                    />
-                  </LineChart>
+                  <div className="capacity-graph-modal__chart-y-axis-inner">
+                    <div className="capacity-graph-modal__chart-y-axis-title-wrap">
+                      <SM className="capacity-graph-modal__chart-y-axis-title">{yAxisLabel}</SM>
+                    </div>
+                    <div className="capacity-graph-modal__chart-y-axis-ticks">
+                      <LineChart
+                        width={Y_AXIS_TICK_WIDTH}
+                        height={CHART_HEIGHT}
+                        data={graphData}
+                        margin={{ ...CHART_Y_MARGIN, left: 0 }}
+                      >
+                        <YAxis {...sharedYAxisProps} width={Y_AXIS_TICK_WIDTH} />
+                      </LineChart>
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="capacity-graph-modal__chart-plot"

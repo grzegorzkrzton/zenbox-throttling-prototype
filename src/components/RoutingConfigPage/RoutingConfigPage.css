@@ -215,6 +215,35 @@
   z-index: 2;
   flex-shrink: 0;
   background: var(--color-bg-white);
+  overflow: visible;
+}
+
+.capacity-graph-modal__chart-y-axis-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 360px;
+  padding-left: var(--spacing-md);
+}
+
+.capacity-graph-modal__chart-y-axis-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.capacity-graph-modal__chart-y-axis-title {
+  display: block;
+  margin: 0;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transform: rotate(-90deg);
+}
+
+.capacity-graph-modal__chart-y-axis-ticks {
+  flex-shrink: 0;
 }
 
 .capacity-graph-modal__chart-plot {
