@@ -1,12 +1,9 @@
 import { SM } from '@zendeskgarden/react-typography';
-import { getYAxisTickTop } from './chart-constants';
+import { CHART_HEIGHT, getYAxisTickTop } from './chart-constants';
 
-export default function YAxisScale({ ticks, maxAxisValue, tickColor, chartHeight }) {
+export default function YAxisScale({ ticks, maxAxisValue, tickColor }) {
   return (
-    <div
-      className="capacity-graph-modal__chart-y-axis-scale"
-      style={{ height: chartHeight }}
-    >
+    <div className="capacity-graph-modal__chart-y-axis-scale" style={{ height: CHART_HEIGHT }}>
       {ticks.map((tick) => (
         <SM
           key={tick}

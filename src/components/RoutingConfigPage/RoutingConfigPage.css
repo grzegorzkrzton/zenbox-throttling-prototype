@@ -175,9 +175,7 @@
 /* Capacity graph modal — spacing on 4px grid via Garden tokens */
 .capacity-graph-modal {
   --capacity-graph-x-axis-distance: 48px;
-  --capacity-graph-y-axis-distance: 24px;
   --capacity-graph-left-gutter: 48px;
-  --capacity-graph-viewport-height: 360px;
 }
 
 .capacity-graph-modal [data-garden-id='modals.body'] {
@@ -204,21 +202,27 @@
   display: flex;
   align-items: stretch;
   width: 100%;
-  height: var(--capacity-graph-viewport-height);
+  min-height: 360px;
   padding-left: var(--capacity-graph-left-gutter);
 }
 
 .capacity-graph-modal__chart-scroll {
   flex: 1;
   min-width: 0;
-  max-height: var(--capacity-graph-viewport-height);
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
-.capacity-graph-modal__chart-scroll-inner {
+.capacity-graph-modal__chart-y-axis {
+  flex-shrink: 0;
+  background: var(--color-bg-white);
+}
+
+.capacity-graph-modal__chart-y-axis-inner {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  height: 360px;
 }
 
 .capacity-graph-modal__chart-y-axis-title-wrap {
@@ -227,8 +231,6 @@
   justify-content: center;
   flex-shrink: 0;
   width: 28px;
-  height: var(--capacity-graph-viewport-height);
-  background: var(--color-bg-white);
 }
 
 .capacity-graph-modal__chart-y-axis-title {
@@ -368,7 +370,7 @@
   color: var(--color-text-primary);
 }
 
-[data-theme="dark"] .capacity-graph-modal__chart-y-axis-title-wrap,
+[data-theme="dark"] .capacity-graph-modal__chart-y-axis,
 [data-theme="dark"] .capacity-graph-modal__chart-footer {
   background: var(--color-bg-primary);
 }
