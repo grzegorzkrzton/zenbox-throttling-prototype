@@ -137,7 +137,7 @@
 
 .routing-config-section__channel-block {
   margin-top: var(--spacing-lg);
-  margin-left: var(--spacing-lg);
+  margin-left: var(--spacing-xl);
 }
 
 .routing-config-section__channel-block + .routing-config-section__channel-block {
@@ -162,7 +162,7 @@
 .routing-config-page__channel-fields {
   display: flex;
   gap: var(--spacing-md);
-  padding-left: var(--spacing-lg);
+  padding-left: var(--spacing-xl);
   margin-top: var(--spacing-sm);
   flex-wrap: wrap;
 }

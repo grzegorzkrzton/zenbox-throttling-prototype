@@ -86,7 +86,9 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
   const gridColor = getColor({ theme, variable: 'border.subtle' });
 
   const chartContainerRef = useRef(null);
+  const lineHoverRef = useRef(null);
   const [tooltipPoint, setTooltipPoint] = useState(null);
+  const [, setLineHoverVersion] = useState(0);
 
   const [emailMaxCapacity, setEmailMaxCapacity] = useState(10);
   const [messagingMaxCapacity, setMessagingMaxCapacity] = useState(5);
@@ -125,35 +127,51 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     setTooltipPoint(null);
   }, []);
 
+  const showLineHover = useCallback((hover) => {
+    lineHoverRef.current = hover;
+    setLineHoverVersion((version) => version + 1);
+  }, []);
+
+  const hideLineHover = useCallback((seriesKey) => {
+    if (lineHoverRef.current?.seriesKey !== seriesKey) return;
+    lineHoverRef.current = null;
+    setLineHoverVersion((version) => version + 1);
+  }, []);
+
   const dotConfig = useMemo(
     () => ({
       chartContainerRef,
+      lineHoverRef,
       onPointHover: showTooltip,
       onPointLeave: hideTooltip,
+      onLineHover: showLineHover,
+      onLineLeave: hideLineHover,
     }),
-    [showTooltip, hideTooltip]
+    [showTooltip, hideTooltip, showLineHover, hideLineHover]
   );
 
   const emailDot = useMemo(
     () =>
       createLineHoverDot({
         ...dotConfig,
-        seriesName: 'Email',
+        seriesKey: 'email',
+        color: emailColor,
         channelTitle: 'Email tickets',
         getCapacityPercent: (payload) => payload.emailCapacity,
       }),
-    [dotConfig]
+    [dotConfig, emailColor]
   );
 
   const messagingDot = useMemo(
     () =>
       createLineHoverDot({
         ...dotConfig,
-        seriesName: 'Messaging',
+        seriesKey: 'messaging',
+        color: messagingColor,
         channelTitle: 'Messaging tickets',
         getCapacityPercent: (payload) => payload.messagingCapacity,
       }),
-    [dotConfig]
+    [dotConfig, messagingColor]
   );
 
   const legendItems = useMemo(() => {
