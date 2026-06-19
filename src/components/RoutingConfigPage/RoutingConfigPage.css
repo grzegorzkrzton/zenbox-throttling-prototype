@@ -256,7 +256,8 @@
 .capacity-graph-modal__series-tooltip-label {
   display: block;
   margin: 0 0 var(--spacing-xxs);
-  font-weight: var(--font-weight-semibold);
+  font: var(--font-size-md) / var(--line-height-md) var(--font-body);
+  font-weight: 800;
   color: var(--color-text-primary);
 }
 
@@ -266,10 +267,16 @@
   gap: var(--spacing-xxs);
 }
 
-.capacity-graph-modal__series-tooltip-value {
+.capacity-graph-modal__series-tooltip-row {
   display: block;
   margin: 0;
+  font-weight: var(--font-weight-regular);
   color: var(--color-text-secondary);
+}
+
+.capacity-graph-modal__series-tooltip-value-amount {
+  font-weight: 700;
+  color: #000;
 }
 
 .capacity-graph-modal__capacity-inputs {
@@ -281,6 +288,10 @@
 [data-theme="dark"] .capacity-graph-modal__series-tooltip {
   background: var(--color-bg-primary);
   border-color: var(--color-grey-700);
+}
+
+[data-theme="dark"] .capacity-graph-modal__series-tooltip-value-amount {
+  color: var(--color-text-primary);
 }
 
 .routing-config-page__footer {

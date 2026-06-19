@@ -4,7 +4,7 @@ import { getColor } from '@zendeskgarden/react-theming';
 import { Modal, Header, Body, Footer, FooterItem, Close } from '@zendeskgarden/react-modals';
 import { Button } from '@zendeskgarden/react-buttons';
 import { Field, Label, Input } from '@zendeskgarden/react-forms';
-import { SM } from '@zendeskgarden/react-typography';
+import { SM, MD, Span } from '@zendeskgarden/react-typography';
 import {
   LineChart,
   Line,
@@ -51,6 +51,15 @@ function ChartLegend({ items }) {
   );
 }
 
+function TooltipRow({ label, value }) {
+  return (
+    <SM className="capacity-graph-modal__series-tooltip-row">
+      {label}
+      <Span className="capacity-graph-modal__series-tooltip-value-amount">{value}</Span>
+    </SM>
+  );
+}
+
 function SeriesTooltip({ point }) {
   if (!point) return null;
 
@@ -59,17 +68,11 @@ function SeriesTooltip({ point }) {
       className="capacity-graph-modal__series-tooltip"
       style={{ left: point.left, top: point.top }}
     >
-      <SM className="capacity-graph-modal__series-tooltip-label">{point.seriesName}</SM>
+      <MD className="capacity-graph-modal__series-tooltip-label">{point.channelTitle}</MD>
       <div className="capacity-graph-modal__series-tooltip-values">
-        <SM className="capacity-graph-modal__series-tooltip-value">
-          Time {point.time} min
-        </SM>
-        <SM className="capacity-graph-modal__series-tooltip-value">
-          {point.ticketsLabel} {point.tickets}
-        </SM>
-        <SM className="capacity-graph-modal__series-tooltip-value">
-          Agent capacity {point.capacityPercent}%
-        </SM>
+        <TooltipRow label="Time (MSO): " value={`${point.time} min`} />
+        <TooltipRow label="Agent capacity (tickets): " value={point.tickets} />
+        <TooltipRow label="Capacity ramp-up: " value={`${point.capacityPercent}%`} />
       </div>
     </div>
   );
@@ -135,7 +138,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
       createLineHoverDot({
         ...dotConfig,
         seriesName: 'Email',
-        ticketsLabel: 'Tickets',
+        channelTitle: 'Email tickets',
         getCapacityPercent: (payload) => payload.emailCapacity,
       }),
     [dotConfig]
@@ -146,7 +149,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
       createLineHoverDot({
         ...dotConfig,
         seriesName: 'Messaging',
-        ticketsLabel: 'Conversations',
+        channelTitle: 'Messaging tickets',
         getCapacityPercent: (payload) => payload.messagingCapacity,
       }),
     [dotConfig]
@@ -194,10 +197,11 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                     tickLine={false}
                     width={48}
                     label={{
-                      value: 'Agent capacity',
+                      value: 'Agent capacity (tickets)',
                       angle: -90,
                       position: 'insideLeft',
-                      offset: 12,
+                      offset: 8,
+                      style: { textAnchor: 'middle' },
                     }}
                   />
                   {email.enabled && (
@@ -229,7 +233,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
             </div>
             <div className="capacity-graph-modal__chart-footer">
               <SM className="capacity-graph-modal__chart-axis-label">
-                Time (minutes since online)
+                Time - minutes since online (MSO)
               </SM>
               <ChartLegend items={legendItems} />
             </div>

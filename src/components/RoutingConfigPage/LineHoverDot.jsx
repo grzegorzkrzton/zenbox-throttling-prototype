@@ -1,7 +1,7 @@
 /**
  * @param {{
  *   seriesName: string;
- *   ticketsLabel: string;
+ *   channelTitle: string;
  *   getCapacityPercent: (payload: object) => number;
  *   onPointHover: (point: object) => void;
  *   onPointLeave: () => void;
@@ -10,7 +10,7 @@
  */
 export function createLineHoverDot({
   seriesName,
-  ticketsLabel,
+  channelTitle,
   getCapacityPercent,
   onPointHover,
   onPointLeave,
@@ -34,8 +34,8 @@ export function createLineHoverDot({
         top: event.clientY - containerRect.top,
         time: payload.time,
         seriesName,
+        channelTitle,
         tickets: value,
-        ticketsLabel,
         capacityPercent: getCapacityPercent(payload),
       });
     };
