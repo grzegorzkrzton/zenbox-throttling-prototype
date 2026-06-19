@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback, useLayoutEffect } from 'react';
 import { useTheme } from 'styled-components';
 import { getColor } from '@zendeskgarden/react-theming';
 import { Modal, Header, Body, Footer, FooterItem, Close } from '@zendeskgarden/react-modals';
@@ -28,6 +28,51 @@ const CHART_MARGIN = {
   bottom: 8,
   left: 16,
 };
+
+const DEFAULT_TOOLTIP_TRANSFORM = 'translate(-50%, calc(-100% - var(--spacing-xs)))';
+
+function getTooltipTransform(vertical, horizontal) {
+  const gap = 'var(--spacing-xs)';
+  const translateY = vertical === 'top' ? `calc(-100% - ${gap})` : gap;
+
+  if (horizontal === 'left') {
+    return `translate(0, ${translateY})`;
+  }
+  if (horizontal === 'right') {
+    return `translate(-100%, ${translateY})`;
+  }
+  return `translate(-50%, ${translateY})`;
+}
+
+function getTooltipPlacement(point, tooltipSize, plotBounds) {
+  const gap = 8;
+  const { width: tooltipWidth, height: tooltipHeight } = tooltipSize;
+  const { top: plotTop, left: plotLeft, width: plotWidth, height: plotHeight } = plotBounds;
+
+  const plotRelativeY = point.top - plotTop;
+  const plotRelativeX = point.left - plotLeft;
+
+  const fitsAbove = plotRelativeY - gap - tooltipHeight >= 0;
+  const fitsBelow = plotRelativeY + gap + tooltipHeight <= plotHeight;
+
+  let vertical = 'top';
+  if (!fitsAbove && fitsBelow) {
+    vertical = 'bottom';
+  } else if (!fitsAbove && !fitsBelow) {
+    vertical = plotRelativeY < plotHeight / 2 ? 'bottom' : 'top';
+  }
+
+  const fitsCenter =
+    plotRelativeX - tooltipWidth / 2 >= 0 &&
+    plotRelativeX + tooltipWidth / 2 <= plotWidth;
+
+  let horizontal = 'center';
+  if (!fitsCenter) {
+    horizontal = plotRelativeX < plotWidth / 2 ? 'left' : 'right';
+  }
+
+  return getTooltipTransform(vertical, horizontal);
+}
 
 function ChartLegend({ items }) {
   if (items.length === 0) return null;
@@ -61,13 +106,40 @@ function TooltipRow({ label, value }) {
   );
 }
 
-function SeriesTooltip({ point }) {
+function SeriesTooltip({ point, plotRef }) {
+  const tooltipRef = useRef(null);
+  const [transform, setTransform] = useState(DEFAULT_TOOLTIP_TRANSFORM);
+
+  useLayoutEffect(() => {
+    if (!point || !tooltipRef.current || !plotRef.current) {
+      setTransform(DEFAULT_TOOLTIP_TRANSFORM);
+      return;
+    }
+
+    const tooltipEl = tooltipRef.current;
+    const plotEl = plotRef.current;
+
+    setTransform(
+      getTooltipPlacement(
+        point,
+        { width: tooltipEl.offsetWidth, height: tooltipEl.offsetHeight },
+        {
+          top: plotEl.offsetTop,
+          left: plotEl.offsetLeft,
+          width: plotEl.offsetWidth,
+          height: plotEl.offsetHeight,
+        }
+      )
+    );
+  }, [point, plotRef]);
+
   if (!point) return null;
 
   return (
     <div
+      ref={tooltipRef}
       className="capacity-graph-modal__series-tooltip"
-      style={{ left: point.left, top: point.top }}
+      style={{ left: point.left, top: point.top, transform }}
     >
       <MD className="capacity-graph-modal__series-tooltip-label">{point.channelTitle}</MD>
       <div className="capacity-graph-modal__series-tooltip-values">
@@ -86,6 +158,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
   const gridColor = getColor({ theme, variable: 'border.subtle' });
 
   const chartContainerRef = useRef(null);
+  const chartPlotRef = useRef(null);
   const lineHoverRef = useRef(null);
   const [tooltipPoint, setTooltipPoint] = useState(null);
   const [, setLineHoverVersion] = useState(0);
@@ -193,7 +266,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
       <Body>
         <div className="capacity-graph-modal__content">
           <div className="capacity-graph-modal__chart" ref={chartContainerRef}>
-            <div className="capacity-graph-modal__chart-plot">
+            <div className="capacity-graph-modal__chart-plot" ref={chartPlotRef}>
               <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={graphData} margin={chartMargin}>
                   <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
@@ -255,7 +328,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
               </SM>
               <ChartLegend items={legendItems} />
             </div>
-            <SeriesTooltip point={tooltipPoint} />
+            <SeriesTooltip point={tooltipPoint} plotRef={chartPlotRef} />
           </div>
 
           <div className="capacity-graph-modal__capacity-inputs">
