@@ -19,6 +19,7 @@ import {
   CHART_HEIGHT,
   CHART_PLOT_MARGIN,
   getYAxisColumnWidth,
+  getYAxisDisplayTicks,
 } from './chart-constants';
 import YAxisScale from './YAxisScale';
 
@@ -100,8 +101,8 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     1
   );
 
-  const yAxisTicks = useMemo(
-    () => getAxisTicks(maxAxisValue),
+  const yAxisDisplayTicks = useMemo(
+    () => getYAxisDisplayTicks(maxAxisValue),
     [maxAxisValue]
   );
 
@@ -176,7 +177,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
 
   const sharedYAxisProps = {
     domain: [0, maxAxisValue],
-    ticks: yAxisTicks,
+    ticks: yAxisDisplayTicks,
     allowDecimals: false,
     axisLine: false,
     tickLine: false,
@@ -198,7 +199,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                     <SM className="capacity-graph-modal__chart-y-axis-title">{yAxisLabel}</SM>
                   </div>
                   <YAxisScale
-                    ticks={yAxisTicks}
+                    ticks={yAxisDisplayTicks}
                     maxAxisValue={maxAxisValue}
                     tickColor={axisTickColor}
                   />
