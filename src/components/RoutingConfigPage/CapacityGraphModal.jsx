@@ -11,22 +11,20 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  ResponsiveContainer,
 } from 'recharts';
 import { generateGraphData } from './workload-pacing';
 import { createLineHoverDot } from './LineHoverDot';
+import {
+  X_AXIS_DISTANCE,
+  CHART_HEIGHT,
+  Y_AXIS_WIDTH,
+  CHART_Y_MARGIN,
+  CHART_PLOT_MARGIN,
+} from './chart-constants';
 
 function getAxisTicks(maxValue) {
   return Array.from({ length: maxValue + 1 }, (_, index) => index);
 }
-
-const CHART_HEIGHT = 360;
-const CHART_MARGIN = {
-  top: 8,
-  right: 16,
-  bottom: 8,
-  left: 16,
-};
 
 function ChartLegend({ items }) {
   if (items.length === 0) return null;
@@ -116,6 +114,13 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     [maxTimeValue]
   );
 
+  const plotWidth = useMemo(() => {
+    const tickSpan = Math.max(maxTimeValue, 1);
+    return tickSpan * X_AXIS_DISTANCE + CHART_PLOT_MARGIN.right;
+  }, [maxTimeValue]);
+
+  const scrollContentWidth = Y_AXIS_WIDTH + plotWidth;
+
   const showTooltip = useCallback((point) => {
     setTooltipPoint(point);
   }, []);
@@ -166,7 +171,22 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
     return items;
   }, [email.enabled, messaging.enabled, emailColor, messagingColor]);
 
-  const chartMargin = CHART_MARGIN;
+  const yAxisLabel = {
+    value: 'Agent capacity (tickets)',
+    angle: -90,
+    position: 'insideLeft',
+    offset: 8,
+    style: { textAnchor: 'middle' },
+  };
+
+  const sharedYAxisProps = {
+    domain: [0, maxAxisValue],
+    ticks: yAxisTicks,
+    allowDecimals: false,
+    tickMargin: 8,
+    axisLine: false,
+    tickLine: false,
+  };
 
   return (
     <Modal className="capacity-graph-modal" onClose={onClose} isLarge>
@@ -174,62 +194,77 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
       <Body>
         <div className="capacity-graph-modal__content">
           <div className="capacity-graph-modal__chart" ref={chartContainerRef}>
-            <div className="capacity-graph-modal__chart-plot">
-              <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-                <LineChart data={graphData} margin={chartMargin}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                  <XAxis
-                    dataKey="time"
-                    domain={[0, maxTimeValue]}
-                    ticks={xAxisTicks}
-                    allowDecimals={false}
-                    interval={0}
-                    tickMargin={8}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    domain={[0, maxAxisValue]}
-                    ticks={yAxisTicks}
-                    allowDecimals={false}
-                    tickMargin={8}
-                    axisLine={false}
-                    tickLine={false}
-                    width={48}
-                    label={{
-                      value: 'Agent capacity (tickets)',
-                      angle: -90,
-                      position: 'insideLeft',
-                      offset: 8,
-                      style: { textAnchor: 'middle' },
-                    }}
-                  />
-                  {email.enabled && (
-                    <Line
-                      type="monotone"
-                      dataKey="emailTickets"
-                      stroke={emailColor}
-                      strokeWidth={2}
-                      name="Email"
-                      dot={emailDot}
-                      activeDot={false}
-                      isAnimationActive={false}
+            <div className="capacity-graph-modal__chart-scroll">
+              <div
+                className="capacity-graph-modal__chart-scroll-inner"
+                style={{ width: scrollContentWidth }}
+              >
+                <div
+                  className="capacity-graph-modal__chart-y-axis"
+                  style={{ width: Y_AXIS_WIDTH }}
+                >
+                  <LineChart
+                    width={Y_AXIS_WIDTH}
+                    height={CHART_HEIGHT}
+                    data={graphData}
+                    margin={CHART_Y_MARGIN}
+                  >
+                    <YAxis
+                      {...sharedYAxisProps}
+                      width={Y_AXIS_WIDTH - CHART_Y_MARGIN.left}
+                      label={yAxisLabel}
                     />
-                  )}
-                  {messaging.enabled && (
-                    <Line
-                      type="monotone"
-                      dataKey="messagingTickets"
-                      stroke={messagingColor}
-                      strokeWidth={2}
-                      name="Messaging"
-                      dot={messagingDot}
-                      activeDot={false}
-                      isAnimationActive={false}
+                  </LineChart>
+                </div>
+                <div
+                  className="capacity-graph-modal__chart-plot"
+                  style={{ width: plotWidth }}
+                >
+                  <LineChart
+                    width={plotWidth}
+                    height={CHART_HEIGHT}
+                    data={graphData}
+                    margin={CHART_PLOT_MARGIN}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                    <XAxis
+                      dataKey="time"
+                      domain={[0, maxTimeValue]}
+                      ticks={xAxisTicks}
+                      allowDecimals={false}
+                      interval={0}
+                      tickMargin={8}
+                      axisLine={false}
+                      tickLine={false}
                     />
-                  )}
-                </LineChart>
-              </ResponsiveContainer>
+                    <YAxis {...sharedYAxisProps} hide width={0} />
+                    {email.enabled && (
+                      <Line
+                        type="monotone"
+                        dataKey="emailTickets"
+                        stroke={emailColor}
+                        strokeWidth={2}
+                        name="Email"
+                        dot={emailDot}
+                        activeDot={false}
+                        isAnimationActive={false}
+                      />
+                    )}
+                    {messaging.enabled && (
+                      <Line
+                        type="monotone"
+                        dataKey="messagingTickets"
+                        stroke={messagingColor}
+                        strokeWidth={2}
+                        name="Messaging"
+                        dot={messagingDot}
+                        activeDot={false}
+                        isAnimationActive={false}
+                      />
+                    )}
+                  </LineChart>
+                </div>
+              </div>
             </div>
             <div className="capacity-graph-modal__chart-footer">
               <SM className="capacity-graph-modal__chart-axis-label">

@@ -173,6 +173,10 @@
 }
 
 /* Capacity graph modal — spacing on 4px grid via Garden tokens */
+.capacity-graph-modal {
+  --capacity-graph-x-axis-distance: 48px;
+}
+
 .capacity-graph-modal [data-garden-id='modals.body'] {
   padding-top: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
@@ -193,18 +197,40 @@
   width: 100%;
 }
 
-.capacity-graph-modal__chart-plot {
+.capacity-graph-modal__chart-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
   width: 100%;
-  height: 360px;
+}
+
+.capacity-graph-modal__chart-scroll-inner {
+  display: flex;
+  align-items: stretch;
+  min-height: 360px;
+}
+
+.capacity-graph-modal__chart-y-axis {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  background: var(--color-bg-white);
+}
+
+.capacity-graph-modal__chart-plot {
+  flex-shrink: 0;
 }
 
 .capacity-graph-modal__chart-footer {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
   margin-top: var(--spacing-xs);
   padding: 0 var(--spacing-md);
+  background: var(--color-bg-white);
 }
 
 .capacity-graph-modal__chart-axis-label {
@@ -243,7 +269,7 @@
 .capacity-graph-modal__series-tooltip {
   position: absolute;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
   min-width: 120px;
   padding: var(--spacing-xs) var(--spacing-sm);
   transform: translate(-50%, calc(-100% - var(--spacing-xs)));
@@ -292,6 +318,11 @@
 
 [data-theme="dark"] .capacity-graph-modal__series-tooltip-value-amount {
   color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .capacity-graph-modal__chart-y-axis,
+[data-theme="dark"] .capacity-graph-modal__chart-footer {
+  background: var(--color-bg-primary);
 }
 
 .routing-config-page__footer {
