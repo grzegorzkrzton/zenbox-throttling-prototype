@@ -15,9 +15,11 @@ import {
 import { generateGraphData } from './workload-pacing';
 import { createLineHoverDot } from './LineHoverDot';
 import {
-  X_AXIS_DISTANCE,
-  CHART_HEIGHT,
   CHART_PLOT_MARGIN,
+  Y_AXIS_LABEL_WIDTH,
+  Y_AXIS_TICK_AREA_WIDTH,
+  getPlotHeight,
+  getPlotWidth,
   getYAxisColumnWidth,
 } from './chart-constants';
 import YAxisScale from './YAxisScale';
@@ -117,10 +119,11 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
 
   const yAxisColumnWidth = getYAxisColumnWidth();
 
-  const plotWidth = useMemo(() => {
-    const tickSpan = Math.max(maxTimeValue, 1);
-    return tickSpan * X_AXIS_DISTANCE + CHART_PLOT_MARGIN.right;
-  }, [maxTimeValue]);
+  const plotWidth = useMemo(() => getPlotWidth(maxTimeValue), [maxTimeValue]);
+
+  const plotHeight = useMemo(() => getPlotHeight(maxAxisValue), [maxAxisValue]);
+
+  const scrollContentWidth = Y_AXIS_TICK_AREA_WIDTH + plotWidth;
 
   const showTooltip = useCallback((point) => {
     setTooltipPoint(point);
@@ -190,31 +193,32 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
           <div className="capacity-graph-modal__chart" ref={chartContainerRef}>
             <div className="capacity-graph-modal__chart-body">
               <div
-                className="capacity-graph-modal__chart-y-axis"
-                style={{ width: yAxisColumnWidth }}
+                className="capacity-graph-modal__chart-y-axis-title-wrap"
+                style={{ width: Y_AXIS_LABEL_WIDTH }}
               >
-                <div className="capacity-graph-modal__chart-y-axis-inner">
-                  <div className="capacity-graph-modal__chart-y-axis-title-wrap">
-                    <SM className="capacity-graph-modal__chart-y-axis-title">{yAxisLabel}</SM>
-                  </div>
+                <SM className="capacity-graph-modal__chart-y-axis-title">{yAxisLabel}</SM>
+              </div>
+              <div className="capacity-graph-modal__chart-scroll">
+                <div
+                  className="capacity-graph-modal__chart-scroll-inner"
+                  style={{ width: scrollContentWidth, height: plotHeight }}
+                >
                   <YAxisScale
                     ticks={yAxisTicks}
                     maxAxisValue={maxAxisValue}
                     tickColor={axisTickColor}
+                    chartHeight={plotHeight}
                   />
-                </div>
-              </div>
-              <div className="capacity-graph-modal__chart-scroll">
-                <div
-                  className="capacity-graph-modal__chart-plot"
-                  style={{ width: plotWidth }}
-                >
-                  <LineChart
-                    width={plotWidth}
-                    height={CHART_HEIGHT}
-                    data={graphData}
-                    margin={CHART_PLOT_MARGIN}
+                  <div
+                    className="capacity-graph-modal__chart-plot"
+                    style={{ width: plotWidth, height: plotHeight }}
                   >
+                    <LineChart
+                      width={plotWidth}
+                      height={plotHeight}
+                      data={graphData}
+                      margin={CHART_PLOT_MARGIN}
+                    >
                     <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                     <XAxis
                       dataKey="time"
@@ -253,6 +257,7 @@ export default function CapacityGraphModal({ email, messaging, onClose }) {
                       />
                     )}
                   </LineChart>
+                  </div>
                 </div>
               </div>
             </div>
