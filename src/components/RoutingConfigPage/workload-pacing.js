@@ -8,6 +8,7 @@
 /**
  * @typedef {Object} WorkloadPacingState
  * @property {boolean} featureEnabled
+ * @property {number} rampUpTimeout
  * @property {ChannelConfig} email
  * @property {ChannelConfig} messaging
  */
@@ -15,8 +16,14 @@
 /** @type {WorkloadPacingState} */
 export const DEFAULT_WORKLOAD_PACING_STATE = {
   featureEnabled: false,
+  rampUpTimeout: 60,
   email: { enabled: false, initialCapacity: 50, rampUpDuration: 30 },
   messaging: { enabled: false, initialCapacity: 50, rampUpDuration: 30 },
+};
+
+export const TIMEOUT_UNITS = {
+  MINUTES: 'minutes',
+  HOURS: 'hours',
 };
 
 export const validateCapacity = (val) => {
@@ -35,6 +42,50 @@ export const validateDuration = (val) => {
   return null;
 };
 
+export const validateRampUpTimeoutInput = (val, unit) => {
+  if (val === '') return 'Required';
+
+  if (unit === TIMEOUT_UNITS.MINUTES) {
+    if (!/^\d+$/.test(String(val).trim())) return 'Must be a whole number';
+    const num = parseInt(val, 10);
+    if (num < 30 || num > 720) return 'Must be between 30 and 720 minutes';
+    return null;
+  }
+
+  const num = parseFloat(val);
+  if (Number.isNaN(num)) return 'Must be a number';
+  if (num < 0.5 || num > 12) return 'Must be between 0.5 and 12 hours';
+  return null;
+};
+
+/**
+ * @param {number} minutes
+ * @param {'minutes' | 'hours'} unit
+ */
+export const toTimeoutDisplayValue = (minutes, unit) => {
+  if (unit === TIMEOUT_UNITS.HOURS) {
+    const hours = minutes / 60;
+    return Number.isInteger(hours) ? String(hours) : String(hours);
+  }
+  return String(minutes);
+};
+
+/**
+ * @param {string} val
+ * @param {'minutes' | 'hours'} unit
+ */
+export const fromTimeoutDisplayValue = (val, unit) => {
+  const num = unit === TIMEOUT_UNITS.HOURS ? parseFloat(val) : parseInt(val, 10);
+  return unit === TIMEOUT_UNITS.HOURS ? Math.round(num * 60) : num;
+};
+
+export const validateRampUpTimeoutMinutes = (minutes) => {
+  if (!Number.isInteger(minutes) || minutes < 30 || minutes > 720) {
+    return 'Must be between 30 and 720 minutes';
+  }
+  return null;
+};
+
 export const isChannelConfigValid = (config) => {
   if (!config.enabled) return true;
   return (
@@ -47,6 +98,7 @@ export const isWorkloadPacingValid = (state) => {
   if (!state.featureEnabled) return false;
   const hasEnabledChannel = state.email.enabled || state.messaging.enabled;
   if (!hasEnabledChannel) return false;
+  if (validateRampUpTimeoutMinutes(state.rampUpTimeout) !== null) return false;
   return isChannelConfigValid(state.email) && isChannelConfigValid(state.messaging);
 };
 

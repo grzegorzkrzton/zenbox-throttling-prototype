@@ -172,6 +172,37 @@
   min-width: 200px;
 }
 
+.routing-config-page__timeout-field {
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  margin-left: var(--spacing-xl);
+}
+
+.routing-config-page__timeout-hint {
+  display: block;
+  min-width: 480px;
+}
+
+.routing-config-page__timeout-input-group {
+  width: 320px;
+}
+
+.routing-config-page__timeout-input-group > input,
+.routing-config-page__timeout-value-input {
+  flex: 0 0 200px;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.routing-config-page__timeout-input-group [data-garden-id='forms.select_wrapper'],
+.routing-config-page__timeout-unit-select {
+  flex: 0 0 120px;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+}
+
 /* Capacity graph modal — spacing on 4px grid via Garden tokens */
 .capacity-graph-modal [data-garden-id='modals.body'] {
   padding-top: var(--spacing-lg);

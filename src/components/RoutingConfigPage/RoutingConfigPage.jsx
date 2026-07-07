@@ -4,6 +4,7 @@ import { Field, Label, Checkbox, Hint, Radio, Fieldset } from '@zendeskgarden/re
 import TopBar from '../TopBar/TopBar';
 import ChannelConfig from './ChannelConfig';
 import CapacityGraphModal from './CapacityGraphModal';
+import RampUpTimeoutField from './RampUpTimeoutField';
 import {
   DEFAULT_WORKLOAD_PACING_STATE,
   isWorkloadPacingValid,
@@ -35,11 +36,13 @@ export default function RoutingConfigPage({
   const [showModal, setShowModal] = useState(false);
   const [emailValid, setEmailValid] = useState(true);
   const [messagingValid, setMessagingValid] = useState(true);
+  const [timeoutValid, setTimeoutValid] = useState(true);
 
   const canGenerateGraph =
     isWorkloadPacingValid(workloadPacing) &&
     (!workloadPacing.email.enabled || emailValid) &&
-    (!workloadPacing.messaging.enabled || messagingValid);
+    (!workloadPacing.messaging.enabled || messagingValid) &&
+    timeoutValid;
 
   const handleSave = () => {
     // Prototype: no persistence
@@ -146,6 +149,14 @@ export default function RoutingConfigPage({
 
                     {workloadPacing.featureEnabled && (
                       <>
+                        <RampUpTimeoutField
+                          minutes={workloadPacing.rampUpTimeout}
+                          onChange={(rampUpTimeout) =>
+                            setWorkloadPacing({ ...workloadPacing, rampUpTimeout })
+                          }
+                          onValidityChange={setTimeoutValid}
+                        />
+
                         <div className="routing-config-section__channel-block">
                           <Field>
                             <Checkbox
