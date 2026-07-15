@@ -129,9 +129,6 @@
 }
 
 .routing-config-section__panel {
-  padding: var(--spacing-lg);
-  background: var(--color-bg-subtle);
-  border-radius: var(--radius-sm);
   margin-top: var(--spacing-md);
 }
 
@@ -351,10 +348,6 @@
 
 [data-theme="dark"] .routing-config-section + .routing-config-section {
   border-color: var(--color-grey-700);
-}
-
-[data-theme="dark"] .routing-config-section__panel {
-  background: var(--color-bg-subtle);
 }
 
 [data-theme="dark"] .routing-config-page__footer {
