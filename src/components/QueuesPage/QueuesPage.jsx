@@ -6,6 +6,7 @@ import PageSidebarNav from '../PageSidebarNav';
 import QueuesTable from './QueuesTable';
 import QueueEditPage from './QueueEditPage';
 import RoutingConfigPage from '../RoutingConfigPage';
+import FloraThemeWrapper from '../../theme/FloraThemeWrapper';
 import './QueuesPage.css';
 
 // Admin Center specific icons
@@ -1448,22 +1449,24 @@ export default function QueuesPage({
   // Show Queue Edit Page if a queue is selected
   if (selectedQueue) {
     return (
-      <QueueEditPage
-        queue={selectedQueue}
-        isCreating={isCreating}
-        onBack={handleBackToList}
-        onSave={handleSaveQueue}
-        navColumn={navColumn}
-        selectedProduct={selectedProduct}
-        products={products}
-        onProductChange={onProductChange}
-        isNavCollapsed={isNavCollapsed}
-      />
+      <FloraThemeWrapper>
+        <QueueEditPage
+          queue={selectedQueue}
+          isCreating={isCreating}
+          onBack={handleBackToList}
+          onSave={handleSaveQueue}
+          navColumn={navColumn}
+          selectedProduct={selectedProduct}
+          products={products}
+          onProductChange={onProductChange}
+          isNavCollapsed={isNavCollapsed}
+        />
+      </FloraThemeWrapper>
     );
   }
 
   return (
-    <div className="queues-page">
+    <FloraThemeWrapper className="queues-page">
       <TopBar
         pageTitle="Predictive routing"
         selectedProduct={selectedProduct}
@@ -1570,6 +1573,6 @@ export default function QueuesPage({
           </div>
         </div>
       </div>
-    </div>
+    </FloraThemeWrapper>
   );
 }

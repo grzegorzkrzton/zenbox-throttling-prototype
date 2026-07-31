@@ -28,7 +28,7 @@
   min-height: 0;
   overflow: hidden;
   background: var(--color-bg-white);
-  border-radius: var(--radius-lg) 0 0 0;
+  border-radius: var(--radius-surface) 0 0 0;
   border-left: 1px solid var(--color-grey-300);
   border-top: 1px solid var(--color-grey-300);
 }
@@ -128,76 +128,60 @@
   gap: var(--spacing-md);
 }
 
-.routing-config-section__panel {
-  margin-top: var(--spacing-md);
-}
-
-.routing-config-section__channel-block {
+/* Workload ramp-up — Figma layout */
+.workload-ramp-up {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 680px;
   margin-top: var(--spacing-lg);
-  margin-left: var(--spacing-xl);
 }
 
-.routing-config-section__channel-block + .routing-config-section__channel-block {
-  margin-top: var(--spacing-md);
-}
-
-.routing-config-section__channel-hint {
-  margin-left: var(--spacing-xl);
-}
-
-.routing-config-section__panel [data-garden-id='forms.checkbox_hint'] {
+.workload-ramp-up__master [data-garden-id='forms.checkbox_hint'] {
   margin-inline-start: var(--spacing-xxs);
 }
 
-.routing-config-section__graph-action {
-  margin-top: var(--spacing-lg);
-  margin-left: var(--spacing-lg);
-  display: flex;
-  justify-content: flex-end;
+.workload-ramp-up__learn-link {
+  white-space: nowrap;
 }
 
-.routing-config-page__channel-fields {
+.workload-ramp-up__container {
   display: flex;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-lg);
   padding-left: var(--spacing-xl);
-  margin-top: var(--spacing-sm);
-  flex-wrap: wrap;
 }
 
-.routing-config-page__channel-fields > * {
-  flex: 1;
-  min-width: 200px;
+.workload-ramp-up__fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
-.routing-config-page__timeout-field {
-  margin-top: var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
-  margin-left: var(--spacing-xl);
+.workload-ramp-up__fieldset [data-garden-id='forms.checkbox_hint'] {
+  margin-inline-start: var(--spacing-xxs);
 }
 
-.routing-config-page__timeout-hint {
-  display: block;
-  min-width: 480px;
+.workload-ramp-up__channel-fields {
+  display: flex;
+  gap: var(--spacing-xs);
+  padding-left: var(--spacing-xl);
+  align-items: flex-start;
 }
 
-.routing-config-page__timeout-input-group {
-  width: 320px;
-}
-
-.routing-config-page__timeout-input-group > input,
-.routing-config-page__timeout-value-input {
-  flex: 0 0 200px;
-  width: 200px;
-  min-width: 200px;
+.workload-ramp-up__channel-field {
+  flex: 1 1 0;
+  min-width: 0;
   max-width: 200px;
 }
 
-.routing-config-page__timeout-input-group [data-garden-id='forms.select_wrapper'],
-.routing-config-page__timeout-unit-select {
-  flex: 0 0 120px;
-  width: 120px;
-  min-width: 120px;
-  max-width: 120px;
+.workload-ramp-up__timeout {
+  max-width: 200px;
+}
+
+.workload-ramp-up__graph-action {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Capacity graph modal — spacing on 4px grid via Garden tokens */
@@ -279,7 +263,7 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-bg-white);
   border: 1px solid var(--color-grey-300);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
 }
 

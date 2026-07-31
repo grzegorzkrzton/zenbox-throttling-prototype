@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Anchor, Button } from '@zendeskgarden/react-buttons';
 import TopBar from '../TopBar/TopBar';
+import FloraThemeWrapper from '../../theme/FloraThemeWrapper';
 import { 
   ChevronDownIcon, 
   HomeIcon,
@@ -211,7 +212,7 @@ export default function AdminCenterPage({ onProductChange, selectedProduct, prod
   }
 
   return (
-    <div className="admin-page">
+    <FloraThemeWrapper className="admin-page">
       <TopBar
         selectedProduct={selectedProduct}
         products={products}
@@ -376,7 +377,7 @@ export default function AdminCenterPage({ onProductChange, selectedProduct, prod
           </main>
         </div>
       </div>
-    </div>
+    </FloraThemeWrapper>
   );
 }
 

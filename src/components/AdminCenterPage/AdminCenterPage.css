@@ -29,7 +29,7 @@
   flex: 1;
   overflow: hidden;
   background: var(--color-bg-white);
-  border-radius: var(--radius-lg) 0 0 0;
+  border-radius: var(--radius-surface) 0 0 0;
   border-left: 1px solid var(--color-grey-300);
   border-top: 1px solid var(--color-grey-300);
 }
@@ -629,7 +629,7 @@
 .condition-canvas {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-grey-300);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--spacing-md);
   max-width: 800px;
 }

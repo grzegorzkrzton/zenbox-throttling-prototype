@@ -28,7 +28,7 @@
   flex: 1;
   overflow: hidden;
   background: var(--color-bg-white);
-  border-radius: var(--radius-lg) 0 0 0;
+  border-radius: var(--radius-surface) 0 0 0;
   box-shadow: var(--shadow-xs);
 }
 
@@ -488,7 +488,7 @@
   max-height: 280px;
   background: var(--color-bg-white);
   border: 1px solid var(--color-grey-300);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
   z-index: 100;
   display: flex;
@@ -670,7 +670,7 @@
   align-items: center;
   padding: 20px;
   border: 1px solid var(--color-grey-300);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   animation: condition-row-enter 0.25s ease-out;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -1127,7 +1127,7 @@
   justify-content: center;
   padding: 2px 8px;
   background: var(--color-input-bg-disabled);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
@@ -1394,7 +1394,7 @@
   width: 40px;
   height: 20px;
   background: var(--color-grey-300);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   transition: background 0.2s ease;
 }
 
@@ -1711,7 +1711,7 @@
   gap: 20px;
   padding: 24px;
   background: var(--color-bg-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-grey-300);
 }
 
@@ -1763,7 +1763,7 @@
   gap: 20px;
   padding: 24px;
   background: var(--color-success-bg);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-success-border);
 }
 
@@ -1793,7 +1793,7 @@
   gap: 6px;
   padding: 4px 12px;
   background: var(--color-success);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -1840,7 +1840,7 @@
   gap: 20px;
   padding: 24px;
   background: var(--color-bg-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-grey-300);
 }
 
@@ -1886,7 +1886,7 @@
   flex-direction: column;
   width: 100%;
   border: 1px solid var(--color-grey-300);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--color-bg-white);
   overflow: hidden;
 }
@@ -2016,7 +2016,7 @@
   gap: 20px;
   padding: 24px;
   background: var(--color-bg-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-grey-300);
 }
 
@@ -2064,7 +2064,7 @@
   padding: 16px;
   background: var(--color-bg-white);
   border: 1px solid var(--color-grey-300);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .predictive-routing__metric-header {
@@ -2303,7 +2303,7 @@
   padding: 24px;
   background: var(--color-bg-white);
   border: 1px solid var(--color-grey-300);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-top: 8px;
 }
 
@@ -2421,7 +2421,7 @@
   height: 20px;
   background: var(--color-grey-300);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color 0.2s ease;
   padding: 0;
@@ -2459,7 +2459,7 @@
 .toggle-switch--small {
   width: 32px;
   height: 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .toggle-switch--small .toggle-switch__slider {

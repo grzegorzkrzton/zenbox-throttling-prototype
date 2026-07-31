@@ -5,6 +5,7 @@ import TopBar from '../TopBar/TopBar';
 import ChannelConfig from './ChannelConfig';
 import CapacityGraphModal from './CapacityGraphModal';
 import RampUpTimeoutField from './RampUpTimeoutField';
+import FloraThemeWrapper from '../../theme/FloraThemeWrapper';
 import {
   DEFAULT_WORKLOAD_PACING_STATE,
   isWorkloadPacingValid,
@@ -34,22 +35,19 @@ export default function RoutingConfigPage({
   const [assignmentMethod, setAssignmentMethod] = useState('reassign-through-queues');
   const [workloadPacing, setWorkloadPacing] = useState(DEFAULT_WORKLOAD_PACING_STATE);
   const [showModal, setShowModal] = useState(false);
-  const [emailValid, setEmailValid] = useState(true);
-  const [messagingValid, setMessagingValid] = useState(true);
-  const [timeoutValid, setTimeoutValid] = useState(true);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
-  const canGenerateGraph =
-    isWorkloadPacingValid(workloadPacing) &&
-    (!workloadPacing.email.enabled || emailValid) &&
-    (!workloadPacing.messaging.enabled || messagingValid) &&
-    timeoutValid;
+  const canGenerateGraph = isWorkloadPacingValid(workloadPacing);
+  const hasEnabledChannel =
+    workloadPacing.email.enabled || workloadPacing.messaging.enabled;
 
   const handleSave = () => {
+    setShowValidationErrors(true);
     // Prototype: no persistence
   };
 
   return (
-    <div className="routing-config-page">
+    <FloraThemeWrapper className="routing-config-page">
       <TopBar
         selectedProduct={selectedProduct}
         products={products}
@@ -123,107 +121,102 @@ export default function RoutingConfigPage({
                   </Fieldset>
                 </section>
 
-                <section className="routing-config-section" style={{ paddingTop: '24px', borderTop: 'none' }}>
-                  <div className="routing-config-section__header">
-                    <h3 className="routing-config-section__title">Workload ramp-up</h3>
-                    <p className="routing-config-section__description">
-                      Gradually increase agent capacity when they sign in for the first time each day.
-                    </p>
-                  </div>
+                <div className="workload-ramp-up">
+                  <Field className="workload-ramp-up__master">
+                    <Checkbox
+                      checked={workloadPacing.featureEnabled}
+                      onChange={(e) =>
+                        setWorkloadPacing({ ...workloadPacing, featureEnabled: e.target.checked })
+                      }
+                    >
+                      <Label isRegular={false}>Workload ramp-up</Label>
+                    </Checkbox>
+                    <Hint>
+                      Gradually pace assignments when an agent signs in for the first time each day.
+                      Set an initial capacity, ramp-up duration and ramp-up timeout.{' '}
+                      <Anchor href="#" isExternal className="workload-ramp-up__learn-link">
+                        Learn about workload ramp-up
+                        <ExternalLinkIcon />
+                      </Anchor>
+                    </Hint>
+                  </Field>
 
-                  <div className="routing-config-section__panel">
-                    <Field>
-                      <Checkbox
-                        checked={workloadPacing.featureEnabled}
-                        onChange={(e) =>
-                          setWorkloadPacing({ ...workloadPacing, featureEnabled: e.target.checked })
-                        }
-                      >
-                        <Label isRegular={false}>Workload ramp-up</Label>
-                      </Checkbox>
-                      <Hint className="routing-config-section__channel-hint">
-                        Gradually pace assignments when an agent signs in for the first time each day.
-                        Set an initial capacity and ramp-up duration.
-                      </Hint>
-                    </Field>
+                  {workloadPacing.featureEnabled && (
+                    <div className="workload-ramp-up__container">
+                      <div className="workload-ramp-up__fieldset">
+                        <Field>
+                          <Checkbox
+                            checked={workloadPacing.email.enabled}
+                            onChange={(e) =>
+                              setWorkloadPacing({
+                                ...workloadPacing,
+                                email: { ...workloadPacing.email, enabled: e.target.checked },
+                              })
+                            }
+                          >
+                            <Label isRegular={false}>Email tickets</Label>
+                          </Checkbox>
+                          <Hint>
+                            Email, web form, API, side conversation, and SMS
+                          </Hint>
+                        </Field>
+                        {workloadPacing.email.enabled && (
+                          <ChannelConfig
+                            config={workloadPacing.email}
+                            onChange={(email) => setWorkloadPacing({ ...workloadPacing, email })}
+                            showValidationErrors={showValidationErrors}
+                          />
+                        )}
+                      </div>
 
-                    {workloadPacing.featureEnabled && (
-                      <>
+                      <div className="workload-ramp-up__fieldset">
+                        <Field>
+                          <Checkbox
+                            checked={workloadPacing.messaging.enabled}
+                            onChange={(e) =>
+                              setWorkloadPacing({
+                                ...workloadPacing,
+                                messaging: { ...workloadPacing.messaging, enabled: e.target.checked },
+                              })
+                            }
+                          >
+                            <Label isRegular={false}>Messaging tickets</Label>
+                          </Checkbox>
+                          <Hint>Zendesk messaging and social media</Hint>
+                        </Field>
+                        {workloadPacing.messaging.enabled && (
+                          <ChannelConfig
+                            config={workloadPacing.messaging}
+                            onChange={(messaging) =>
+                              setWorkloadPacing({ ...workloadPacing, messaging })
+                            }
+                            showValidationErrors={showValidationErrors}
+                          />
+                        )}
+                      </div>
+
+                      {hasEnabledChannel && (
                         <RampUpTimeoutField
-                          minutes={workloadPacing.rampUpTimeout}
+                          value={workloadPacing.rampUpTimeout}
                           onChange={(rampUpTimeout) =>
                             setWorkloadPacing({ ...workloadPacing, rampUpTimeout })
                           }
-                          onValidityChange={setTimeoutValid}
+                          showValidationErrors={showValidationErrors}
                         />
+                      )}
 
-                        <div className="routing-config-section__channel-block">
-                          <Field>
-                            <Checkbox
-                              checked={workloadPacing.email.enabled}
-                              onChange={(e) =>
-                                setWorkloadPacing({
-                                  ...workloadPacing,
-                                  email: { ...workloadPacing.email, enabled: e.target.checked },
-                                })
-                              }
-                            >
-                              <Label isRegular={false}>Email</Label>
-                            </Checkbox>
-                            <Hint className="routing-config-section__channel-hint">
-                              Email, web form, API, side conversation, and SMS
-                            </Hint>
-                          </Field>
-                          {workloadPacing.email.enabled && (
-                            <ChannelConfig
-                              config={workloadPacing.email}
-                              onChange={(email) => setWorkloadPacing({ ...workloadPacing, email })}
-                              onValidityChange={setEmailValid}
-                            />
-                          )}
-                        </div>
-
-                        <div className="routing-config-section__channel-block">
-                          <Field>
-                            <Checkbox
-                              checked={workloadPacing.messaging.enabled}
-                              onChange={(e) =>
-                                setWorkloadPacing({
-                                  ...workloadPacing,
-                                  messaging: { ...workloadPacing.messaging, enabled: e.target.checked },
-                                })
-                              }
-                            >
-                              <Label isRegular={false}>Messaging</Label>
-                            </Checkbox>
-                            <Hint className="routing-config-section__channel-hint">
-                              Social media and native messages
-                            </Hint>
-                          </Field>
-                          {workloadPacing.messaging.enabled && (
-                            <ChannelConfig
-                              config={workloadPacing.messaging}
-                              onChange={(messaging) =>
-                                setWorkloadPacing({ ...workloadPacing, messaging })
-                              }
-                              onValidityChange={setMessagingValid}
-                            />
-                          )}
-                        </div>
-
-                        <div className="routing-config-section__graph-action">
-                          <Button
-                            isPrimary
-                            disabled={!canGenerateGraph}
-                            onClick={() => setShowModal(true)}
-                          >
-                            Generate graph
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </section>
+                      <div className="workload-ramp-up__graph-action">
+                        <Button
+                          isPrimary
+                          disabled={!canGenerateGraph}
+                          onClick={() => setShowModal(true)}
+                        >
+                          Generate graph
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </section>
             </div>
 
@@ -244,6 +237,6 @@ export default function RoutingConfigPage({
           onClose={() => setShowModal(false)}
         />
       )}
-    </div>
+    </FloraThemeWrapper>
   );
 }
